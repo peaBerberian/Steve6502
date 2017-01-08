@@ -341,6 +341,8 @@ drawGoldApple:
 
 
 drawSnake:
+; here, when snakeLength is >= $82, we have a bug where the tail never goes
+; black. find out why ($82+$10=$92)
   ldx snakeLength
   lda #colorBlack
   sta (snakeHeadL,x) ; erase end of tail (paint black)
