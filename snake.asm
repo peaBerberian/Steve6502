@@ -16,6 +16,8 @@ define snakeBodyStart $12 ; start of snake body byte pairs
 define snakeDirection $02 ; direction (possible values are below)
 define snakeLength    $03 ; snake length, in bytes
 
+define colorGreen $05
+
 ; Directions (each using a separate bit)
 define movingUp      1
 define movingRight   2
@@ -48,16 +50,16 @@ initSnake:
 
   lda #4  ;start length (2 segments)
   sta snakeLength
-  
+
   lda #$11
   sta snakeHeadL
-  
+
   lda #$10
   sta snakeBodyStart
-  
+
   lda #$0f
   sta $14 ; body segment 1
-  
+
   lda #$04
   sta snakeHeadH
   sta $13 ; body segment 1
@@ -248,7 +250,7 @@ collision:
 
 drawApple:
   ldy #0
-  lda sysRandom
+  lda #colorGreen
   sta (appleL),y
   rts
 
