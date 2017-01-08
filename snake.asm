@@ -20,11 +20,19 @@ define snakeDirection $02 ; direction (possible values are below)
 define snakeLength    $03 ; snake length, in bytes
 define startLength    $04 ; start lengh of the snake, in bytes
 define snakeGrow      $05; how much the snake grows in this loop
+define appleType      $06; what is the type of the current apple
+
+; Apple types
+define greenApple $90 ; add 1 to growth
+define redApple   $91 ; add 3 to growth
+define goldApple  $93 ; add 5 to growth
 
 ; Colors
 define colorGreen $05
 define colorWhite $01
 define colorBlack $00
+define colorRed   $02
+define colorGold  $07
 
 ; Directions (each using a separate bit)
 define movingUp      1
@@ -48,7 +56,7 @@ define sysLastKey   $ff ; last key ASCII code address
 
 init:
   jsr initSnake
-  jsr generateApplePosition
+  jsr generateApple
   rts
 
 
@@ -62,7 +70,7 @@ initSnake:
   lda #startLength ; set initial length
   sta snakeLength
 
-  lda #$00 ; update screen location of the head
+  lda #$01 ; update screen location of the head
   sta snakeHeadL
 
   lda #$0f
@@ -74,6 +82,33 @@ initSnake:
   sta $15 ; body segment 2
   rts
 
+generateApple:
+  jsr generateAppleType
+  jsr generateApplePosition
+	rts
+
+generateAppleType:
+  lda sysRandom
+  tax
+  and #$c0
+  cmp #$c0
+	beq generateRedApple
+	txa
+  and #$32
+  cmp #$32
+	beq generateGoldApple
+generateGreenApple:
+  lda #greenApple
+  sta appleType
+  rts
+generateRedApple:
+  lda #redApple
+  sta appleType
+  rts
+generateGoldApple:
+  lda #goldApple
+  sta appleType
+  rts
 
 generateApplePosition:
   ;load a new random byte into $00
@@ -160,11 +195,33 @@ checkAppleCollision:
   lda appleH
   cmp snakeHeadH
   bne doneCheckingAppleCollision
-
-	inc snakeGrow ; indicate that snake should grow
-
-  jsr generateApplePosition
+  jsr eatApple
 doneCheckingAppleCollision:
+  rts
+
+eatApple:
+  lda appleType
+  cmp #redApple
+  beq eatRedApple
+  cmp #goldApple
+  beq eatGoldApple
+eatGreenApple:
+	inc snakeGrow
+  jsr generateApple
+  rts
+eatRedApple:
+	inc snakeGrow
+	inc snakeGrow
+	inc snakeGrow
+  jsr generateApple
+  rts
+eatGoldApple:
+	inc snakeGrow
+	inc snakeGrow
+	inc snakeGrow
+	inc snakeGrow
+	inc snakeGrow
+  jsr generateApple
   rts
 
 
@@ -264,7 +321,21 @@ collision:
 
 drawApple:
   ldy #0
+  lda appleType
+	cmp #redApple
+  beq drawRedApple
+	cmp #goldApple
+  beq drawGoldApple
+drawGreenApple:
   lda #colorGreen
+  sta (appleL),y
+  rts
+drawRedApple:
+  lda #colorRed
+  sta (appleL),y
+  rts
+drawGoldApple:
+  lda #colorGold
   sta (appleL),y
   rts
 
@@ -281,7 +352,7 @@ drawSnake:
 
 
 spinWheels:
-  ldx #0
+  ldx #99
 spinloop:
   nop
   nop
