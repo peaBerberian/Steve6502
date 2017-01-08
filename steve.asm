@@ -85,18 +85,18 @@ initSnake:
 generateApple:
   jsr generateAppleType
   jsr generateApplePosition
-	rts
+  rts
 
 generateAppleType:
   lda sysRandom
   tax
   and #$c0
   cmp #$c0
-	beq generateRedApple
-	txa
+  beq generateRedApple
+  txa
   and #$32
   cmp #$32
-	beq generateGoldApple
+  beq generateGoldApple
 generateGreenApple:
   lda #greenApple
   sta appleType
@@ -206,21 +206,21 @@ eatApple:
   cmp #goldApple
   beq eatGoldApple
 eatGreenApple:
-	inc snakeGrow
+  inc snakeGrow
   jsr generateApple
   rts
 eatRedApple:
-	inc snakeGrow
-	inc snakeGrow
-	inc snakeGrow
+  inc snakeGrow
+  inc snakeGrow
+  inc snakeGrow
   jsr generateApple
   rts
 eatGoldApple:
-	inc snakeGrow
-	inc snakeGrow
-	inc snakeGrow
-	inc snakeGrow
-	inc snakeGrow
+  inc snakeGrow
+  inc snakeGrow
+  inc snakeGrow
+  inc snakeGrow
+  inc snakeGrow
   jsr generateApple
   rts
 
@@ -253,7 +253,7 @@ didntCollide:
 updateSnake:
   lda snakeGrow
   cmp #0
-  beq startLoop 
+  beq startLoop
   inc snakeLength
   inc snakeLength
   dec snakeGrow
@@ -322,9 +322,9 @@ collision:
 drawApple:
   ldy #0
   lda appleType
-	cmp #redApple
+  cmp #redApple
   beq drawRedApple
-	cmp #goldApple
+  cmp #goldApple
   beq drawGoldApple
 drawGreenApple:
   lda #colorGreen
