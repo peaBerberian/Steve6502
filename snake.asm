@@ -3,8 +3,11 @@
 ; \__ \ ' \/ _` | / / -_) _ \__ \ () / /
 ; |___/_||_\__,_|_\_\___\___/___/\__/___|
 
-; Little modifications to the snake6502 done by Willem van der Jagt:
+; Modifications to the snake6502 done by Willem van der Jagt:
 ; https://gist.github.com/wgt/9043907
+
+; Can be played on Nick Morgan's 6502 emulator:
+; http://skilldrick.github.io/easy6502/
 
 ; Change direction: W A S D
 
@@ -15,8 +18,12 @@ define snakeHeadH     $11 ; screen location of snake head, high byte
 define snakeBodyStart $12 ; start of snake body byte pairs
 define snakeDirection $02 ; direction (possible values are below)
 define snakeLength    $03 ; snake length, in bytes
+define startLength    $04 ; start lengh of the snake, in bytes
 
+; Colors
 define colorGreen $05
+define colorWhite $01
+define colorBlack $00
 
 ; Directions (each using a separate bit)
 define movingUp      1
@@ -31,8 +38,8 @@ define ASCII_s      $73
 define ASCII_d      $64
 
 ; System variables
-define sysRandom    $fe
-define sysLastKey   $ff
+define sysRandom    $fe ; random byte address
+define sysLastKey   $ff ; last key ASCII code address
 
 
   jsr init
@@ -45,22 +52,19 @@ init:
 
 
 initSnake:
-  lda #movingRight  ;start direction
+  lda #movingRight ; set initial direction
   sta snakeDirection
 
-  lda #4  ;start length (2 segments)
+  lda #startLength ; set initial length
   sta snakeLength
 
-  lda #$11
+  lda #$00 ; update screen location of the head
   sta snakeHeadL
-
-  lda #$10
-  sta snakeBodyStart
 
   lda #$0f
   sta $14 ; body segment 1
 
-  lda #$04
+  lda #$02
   sta snakeHeadH
   sta $13 ; body segment 1
   sta $15 ; body segment 2
@@ -156,6 +160,7 @@ checkAppleCollision:
   ;eat apple
   inc snakeLength
   inc snakeLength ;increase length
+
   jsr generateApplePosition
 doneCheckingAppleCollision:
   rts
@@ -189,7 +194,6 @@ didntCollide:
 updateSnake:
   ldx snakeLength
   dex
-  txa
 updateloop:
   lda snakeHeadL,x
   sta snakeBodyStart,x
@@ -257,11 +261,11 @@ drawApple:
 
 drawSnake:
   ldx snakeLength
-  lda #0
+  lda #colorBlack
   sta (snakeHeadL,x) ; erase end of tail
 
   ldx #0
-  lda #1
+  lda #colorWhite
   sta (snakeHeadL,x) ; paint head
   rts
 
