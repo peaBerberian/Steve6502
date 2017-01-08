@@ -19,6 +19,7 @@ define snakeBodyStart $12 ; start of snake body byte pairs
 define snakeDirection $02 ; direction (possible values are below)
 define snakeLength    $03 ; snake length, in bytes
 define startLength    $04 ; start lengh of the snake, in bytes
+define snakeGrow      $05; how much the snake grows in this loop
 
 ; Colors
 define colorGreen $05
@@ -52,6 +53,9 @@ init:
 
 
 initSnake:
+  lda #$00 ; initialize the snake growth
+  sta snakeGrow
+
   lda #movingRight ; set initial direction
   sta snakeDirection
 
@@ -157,9 +161,7 @@ checkAppleCollision:
   cmp snakeHeadH
   bne doneCheckingAppleCollision
 
-  ;eat apple
-  inc snakeLength
-  inc snakeLength ;increase length
+	inc snakeGrow ; indicate that snake should grow
 
   jsr generateApplePosition
 doneCheckingAppleCollision:
@@ -192,6 +194,14 @@ didntCollide:
 
 
 updateSnake:
+  lda snakeGrow
+  cmp #0
+  beq startLoop 
+  inc snakeLength
+  inc snakeLength
+  dec snakeGrow
+
+startLoop:
   ldx snakeLength
   dex
 updateloop:
@@ -209,7 +219,7 @@ updateloop:
   bcs down
   lsr
   bcs left
-up:
+up: ; move the head up
   lda snakeHeadL
   sec
   sbc #$20
@@ -218,17 +228,17 @@ up:
   rts
 upup:
   dec snakeHeadH
-  lda #$1
+  lda #$1 ; the minimum high byte is $02
   cmp snakeHeadH
   beq collision
   rts
-right:
+right: ; move the head to the right
   inc snakeHeadL
   lda #$1f
   bit snakeHeadL
   beq collision
   rts
-down:
+down: ; move the head down
   lda snakeHeadL
   clc
   adc #$20
@@ -237,11 +247,11 @@ down:
   rts
 downdown:
   inc snakeHeadH
-  lda #$6
+  lda #$6 ; the maximum high byte is $05
   cmp snakeHeadH
   beq collision
   rts
-left:
+left: ; move the head to the left
   dec snakeHeadL
   lda snakeHeadL
   and #$1f
@@ -262,11 +272,11 @@ drawApple:
 drawSnake:
   ldx snakeLength
   lda #colorBlack
-  sta (snakeHeadL,x) ; erase end of tail
+  sta (snakeHeadL,x) ; erase end of tail (paint black)
 
-  ldx #0
+  ldy #0
   lda #colorWhite
-  sta (snakeHeadL,x) ; paint head
+  sta (snakeHeadL),y ; paint head
   rts
 
 
