@@ -54,7 +54,7 @@ There are 3 kind of apples, based on their colors. Rarer is the apple, more stev
 
 ### Notes
 
-I did not add a winning mechanism yet, and after eating too much apples you might encounter a buffer overflow, leading to unwanted behaviors. Let's just say that after eating to much apples, steve becomes sick or that the game goes into hard mode, as you wish.
+I did not add a winning mechanism yet, and after eating too much apples you might encounter a buffer overflow, leading to unwanted behaviors. This bug is also present in the original version. Let's just say that after eating to much apples, steve becomes sick or that the game goes into hard mode, as you wish.
 
 ## Possible improvements
 
