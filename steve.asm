@@ -23,16 +23,16 @@ define snakeGrow      $05; how much the snake grows in this loop
 define appleType      $06; what is the type of the current apple
 
 ; Apple types
-define greenApple $90 ; add 1 to growth
-define redApple   $91 ; add 3 to growth
-define goldApple  $93 ; add 5 to growth
+define greenApple 1 ; add 1 to growth
+define redApple   2 ; add 3 to growth
+define goldApple  3 ; add 5 to growth
 
 ; Colors
-define colorGreen $05
-define colorWhite $01
-define colorBlack $00
-define colorRed   $02
-define colorGold  $07
+define colorGreen 5
+define colorWhite 1
+define colorBlack 0
+define colorRed   2
+define colorGold  7
 
 ; Directions (each using a separate bit)
 define movingUp      1
