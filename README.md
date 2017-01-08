@@ -4,7 +4,7 @@
 
 This is an implementation of the [snake video game](https://en.wikipedia.org/wiki/Snake_(video_game)), written in [6502](https://en.wikipedia.org/wiki/MOS_Technology_6502) assembly.
 
-This implementation is based on [Nick Morgan](https://twitter.com/skilldrick)'s implementation from [easy 6502](http://skilldrick.github.io/easy6502/), itself based on [Willem van der Jagt](https://twitter.com/wgt) [implementation](https://gist.github.com/wgt/9043907).
+This implementation is based on [Nick Morgan](https://twitter.com/skilldrick)'s implementation from [easy 6502](http://skilldrick.github.io/easy6502/), itself based on [Willem van der Jagt](https://twitter.com/wgt) [implementation](https://gist.github.com/wkjagt/9043907).
 
 I did this project as a first step with 6502 assembly (don't mind it, this is just a tiny personal project, I just like writing nice README.md files).
 
