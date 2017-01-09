@@ -203,23 +203,14 @@ eatApple:
   lda appleType
   cmp #redApple
   beq eatRedApple
-  cmp #goldApple
-  beq eatGoldApple
-eatGreenApple:
+  cmp #greenApple
+  beq eatGreenApple
   inc snakeGrow
-  jsr generateApple
-  rts
+  inc snakeGrow
 eatRedApple:
   inc snakeGrow
   inc snakeGrow
-  inc snakeGrow
-  jsr generateApple
-  rts
-eatGoldApple:
-  inc snakeGrow
-  inc snakeGrow
-  inc snakeGrow
-  inc snakeGrow
+eatGreenApple:
   inc snakeGrow
   jsr generateApple
   rts
